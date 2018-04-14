@@ -53,6 +53,11 @@ class TicTacToe():
         self.c = c #column access val in state
         if(self.board[self.r][self.c] == '-'):
             self.board[self.r][self.c] = 'o'
+        else:
+            print("Board Space already filled. Try Again.")
+            #Here we will return a value that will prompt server to try again.
+            return (70)
+            #You need to call something here.
 
     def updateServerState(self, r): #Updates Server State
         random.seed()
@@ -86,24 +91,18 @@ class Server():
         t.display()
         while(self.moves != (self.rows*self.rows)):
            print("Player Move: \n")
-           k = -1
-           j = -1
-           #Restrict user input for rows
-           while(k < 0 or k > self.rows-1): 
-               try:
-                   k = int(input("Choose row[0-"+str(self.rows-1)+"]: "))
-               except ValueError:
-                   print("Input Out Of Bounds. Try Again")
 
-           #Restrict user input for columns        
-           while(j < 0 or j > self.rows-1): 
-               try:
-                   j = int(input("Choose column[0-"+str(self.rows-1)+"]: "))
-               except ValueError:
-                   print("Input Out of Bounds. Try Again")
+           #playerInput() will set restrictions on player input
+           (p,q) = self.playerInput()
 
-           #Marks a 'o' for player input        
-           t.updatePlayerState(k,j) #Places 'o' for player inputs
+           #updatePlayerState will Mark 'o' for user input with some restrictions
+           if(t.updatePlayerState(p,q) != 70): #note that 70 is the indication for invalid board space here
+               t.updatePlayerState
+           else:
+               (p,q) = self.playerInput()
+               t.updatePlayerState(p,q)
+           
+           #Increment moves everytime a move has been made
            self.moves += 1
 
            #Checks if a winning move has been made
@@ -128,8 +127,26 @@ class Server():
                break
            self.moves += 1
 
-  
-  
+    def playerInput(self):
+      k = -1
+      j = -1
+      #Restrict User Input for rows
+      while(k < 0 or k > self.rows-1): 
+          try:
+              k = int(input("Choose row[0-"+str(self.rows-1)+"]: "))
+          except ValueError:
+              print("Input Out Of Bounds. Try Again")
+      
+      #Restrict User Input for Columns  
+      while(j < 0 or j > self.rows-1): 
+          try:
+              j = int(input("Choose column[0-"+str(self.rows-1)+"]: "))
+          except ValueError:
+              print("Input Out of Bounds. Try Again")
+
+      return (k,j) #We will use what is returned here
+
+
 def main():
     s = Server()
     s.play()
