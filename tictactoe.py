@@ -3,6 +3,7 @@
 #                        Author: Shota Nakamura
 # Objective: Create a playable nxn Tic-Tac-Toe Board. 
 #            Opponent will choose random placement on board.
+#Note: This is the very basic TicTacToe game.
 #*******************************************************************
 import random
 
